@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { ozaClient } from '@bangumi/client';
-import type { User } from '@bangumi/client/user';
+import type { CurrentUser } from '@bangumi/client/user';
 
 interface UserContextType {
-  user?: User;
+  user?: CurrentUser;
   redirectToLogin: () => void;
   login: (username: string, password: string, captchaResp: string) => Promise<void>;
 }

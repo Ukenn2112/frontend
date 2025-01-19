@@ -38,7 +38,11 @@ const ReplyForm = ({
     if (sending) return; // TODO: disable button instead
     setSending(true);
     try {
-      const response = await ozaClient.createGroupReply(topicId, { content, replyTo });
+      const response = await ozaClient.createGroupReply(topicId, {
+        'cf-turnstile-response': '',
+        content,
+        replyTo,
+      });
       if (response.status === 200) {
         // document.getElementById(`post_${res.data.id}`)?.scrollIntoView({ block: 'center' });
         onSuccess?.(response.data);
