@@ -6,7 +6,7 @@ export type Avatar = components['schemas']['Avatar'];
 export interface PaginationQuery {
   /** Limit */
   limit: number;
-  /** Offset */
+  /** Offsett */
   offset: number;
 }
 
