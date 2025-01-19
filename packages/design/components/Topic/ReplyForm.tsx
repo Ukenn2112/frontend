@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 
 import { ozaClient } from '@bangumi/client';
-import type { BasicReply } from '@bangumi/client/client';
+import type { SubReply } from '@bangumi/client/client';
 
 import type { EditorFormProps } from '../../components/EditorForm';
 import EditorForm from '../../components/EditorForm';
@@ -18,7 +18,7 @@ interface ReplyFormProps extends EditorFormProps {
   onChange?: (content: string) => void;
   onCancel?: () => void;
   /** 回复成功时的回调函数 */
-  onSuccess?: (reply: BasicReply) => void;
+  onSuccess?: (reply: SubReply) => void;
 }
 
 const ReplyForm = ({

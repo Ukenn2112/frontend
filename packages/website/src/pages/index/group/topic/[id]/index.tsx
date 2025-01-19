@@ -1,4 +1,4 @@
-import type { BasicReply } from 'packages/client/client';
+import type { SubReply } from 'packages/client/client';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,7 +39,7 @@ const TopicPage: FC = () => {
     document.getElementById(anchor)?.scrollIntoView(true);
   }, [topicDetail]);
 
-  const handleReplySuccess = async (reply: BasicReply) => {
+  const handleReplySuccess = async (reply: SubReply) => {
     navigate(`#post_${reply.id}`);
     // 刷新评论列表
     await mutate();

@@ -4,7 +4,6 @@ import React, { memo, useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ozaClient } from '@bangumi/client';
-import type { BasicReply } from '@bangumi/client/client';
 import type { Reply, SubReply, User } from '@bangumi/client/topic';
 import { State } from '@bangumi/client/topic';
 import { Friend, OriginalPoster, TopicClosed, TopicReopen, TopicSilent } from '@bangumi/icons';
@@ -140,7 +139,7 @@ const Comment: FC<CommentProps> = ({
     );
   }
 
-  const handleReplySuccess = async (reply: BasicReply) => {
+  const handleReplySuccess = async (reply: SubReply) => {
     // 先隐藏回复框避免scrollIntoView后布局变化
     setShowReplyEditor(false);
     navigate(`#post_${reply.id}`);
