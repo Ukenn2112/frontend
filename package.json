@@ -110,5 +110,8 @@
         "vite"
       ]
     }
+  },
+  "dependencies": {
+    "react-turnstile": "^1.1.4"
   }
 }

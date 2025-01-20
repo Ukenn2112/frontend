@@ -62,8 +62,7 @@ export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
     login: async (email, password, captchaResp) => {
       await login(email, password, captchaResp);
       await mutate();
-    },
-    user,
+    }
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

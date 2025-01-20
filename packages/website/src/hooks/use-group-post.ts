@@ -5,8 +5,8 @@ import useSWR from 'swr';
 import { ozaClient } from '@bangumi/client';
 
 export interface UseGroupPostRet {
-  data: ozaClient.GroupReply;
-  mutate: KeyedMutator<ozaClient.GroupReply>;
+  data: ozaClient.Reply;
+  mutate: KeyedMutator<ozaClient.Reply>;
 }
 
 function useGroupPost(id: number): UseGroupPostRet {

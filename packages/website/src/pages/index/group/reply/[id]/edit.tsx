@@ -43,7 +43,7 @@ const EditReplyPage = () => {
     setSending(true);
     const response = await ozaClient.editGroupPost(postId, { text });
     if (response.status === 200) {
-      const topicPath = `/group/topic/${data.topicID}`;
+      const topicPath = `/group/topic/${data.id}`;
       // 确保再次回到此页面时内容是最新的，不需要向后端请求数据，因此将 revalidate 设置为 false
       mutate({ ...data, text }, { revalidate: false });
       // 乐观更新回复内容
@@ -67,15 +67,15 @@ const EditReplyPage = () => {
 
   return (
     <>
-      <Helmet title={`修改主题“${data.topicTitle}”的回复`} />
+      <Helmet title={`修改主题“${data.text}”的回复`} />
       <Typography.Text type='secondary' className={styles.tipText}>
         修改主题
         <Typography.Link
-          to={`/group/topic/${data.topicID}`}
+          to={`/group/topic/${data.id}`}
           fontWeight='bold'
           className={styles.topicLink}
         >
-          {data.topicTitle}
+          {data.text}
         </Typography.Link>
         的回复
       </Typography.Text>

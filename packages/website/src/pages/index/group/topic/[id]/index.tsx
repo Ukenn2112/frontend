@@ -1,4 +1,4 @@
-import type { BasicReply } from 'packages/client/client';
+import type { Reply, SubReply, SlimGroup, User } from 'packages/client/client';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,7 +26,7 @@ const TopicPage: FC = () => {
   const { user } = useUser();
   const originalPosterId = topicDetail.creator.id;
   const isClosed = topicDetail.state === 1;
-  const { group } = topicDetail;
+  const { parent: group } = topicDetail;
   const { group: groupProfile } = useGroup(group.name);
 
   const [replyContent, setReplyContent] = useState('');
@@ -39,7 +39,7 @@ const TopicPage: FC = () => {
     document.getElementById(anchor)?.scrollIntoView(true);
   }, [topicDetail]);
 
-  const handleReplySuccess = async (reply: BasicReply) => {
+  const handleReplySuccess = async (reply: SubReply) => {
     navigate(`#post_${reply.id}`);
     // 刷新评论列表
     await mutate();
@@ -60,7 +60,7 @@ const TopicPage: FC = () => {
         title={topicDetail.title}
         creator={topicDetail.creator}
         createdAt={topicDetail.createdAt}
-        group={topicDetail.group}
+        parent={topicDetail.parent as SlimGroup}
       />
       <Layout
         type='alpha'
@@ -90,7 +90,7 @@ const TopicPage: FC = () => {
                   isReply={false}
                   floor={idx + 2}
                   originalPosterId={originalPosterId}
-                  user={user}
+                  user={user as User | undefined}
                   onCommentUpdate={mutate}
                   {...comment}
                 />

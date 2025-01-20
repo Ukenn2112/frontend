@@ -1,3 +1,3 @@
 export * from './common';
 
-export type { Group, GroupProfile, GroupMember } from './client';
+export type { SlimGroup, SlimUser, GroupProfile, GroupMember, TopicDetail } from './client';

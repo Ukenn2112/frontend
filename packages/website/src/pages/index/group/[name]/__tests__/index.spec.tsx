@@ -89,7 +89,7 @@ it('should match snapshot properly', async () => {
 it('should list recent topics', async () => {
   const test = new GroupHomeTest('test', {
     group: Sandbox,
-    topics: RecentTopics as ResponseWithPagination<Topic[]>,
+    topics: RecentTopics as unknown as ResponseWithPagination<Topic[]>,
   });
 
   await test.assertTopicExist({

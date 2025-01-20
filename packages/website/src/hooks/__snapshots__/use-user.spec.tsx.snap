@@ -12,3 +12,5 @@ Object {
   "username": "382951",
 }
 `;
+
+exports[`should refresh me if login succeeded 2`] = `undefined`;

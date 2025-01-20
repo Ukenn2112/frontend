@@ -5,13 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { ozaClient } from '@bangumi/client';
 import { EditorForm, Form, Input, toast } from '@bangumi/design';
-import type { UseGroupTopicRet } from '@bangumi/website/hooks/use-group-topic';
+import { useTurnstile } from 'react-turnstile';
+import type { TopicDetail } from '@bangumi/client/group';
 
 import styles from './TopicForm.module.less';
 
 interface FormData {
   title: string;
   text: string;
+  // Add cf-turnstile-response to the form data
+  'cf-turnstile-response': string;
 }
 
 export interface TopicFormProps {
@@ -19,7 +22,10 @@ export interface TopicFormProps {
   /** 小组 slug name，指定此参数时为发表话题 */
   groupName?: string;
   /** 话题，指定此参数时为修改话题 */
-  topic?: UseGroupTopicRet;
+  topic?: {
+    data: TopicDetail;
+    mutate: (data: TopicDetail) => void;
+  };
 }
 
 /**
@@ -34,13 +40,24 @@ const TopicForm = ({ quickPost = false, groupName, topic }: TopicFormProps) => {
 
   const navigate = useNavigate();
 
-  const { register, handleSubmit, control } = useForm<FormData>({
-    defaultValues: topic?.data,
+  const { register, handleSubmit, control, setValue } = useForm<FormData>({
+    // Sync topic title, text with form data but not cf-turnstile-response
+    defaultValues: {
+      title: topic?.data.title,
+      text: topic?.data.text,
+    },
   });
   const [sending, setSending] = useState(false);
+  const { execute } = useTurnstile();
 
   const postNewTopic = async (data: FormData, groupName: string) => {
-    const response = await ozaClient.createNewGroupTopic(groupName, data);
+    const { title, text, ['cf-turnstile-response']: token } = data;
+    // `CreateTopic` was renamed to `createTopic`
+    const response = await ozaClient.createNewGroupTopic(groupName, {
+      title,
+      text,
+      'cf-turnstile-response': token,
+    });
     if (response.status === 200) {
       navigate(`/group/topic/${response.data.id}`);
     } else {
@@ -50,9 +67,16 @@ const TopicForm = ({ quickPost = false, groupName, topic }: TopicFormProps) => {
   };
 
   const editTopic = async (data: FormData, id: number) => {
-    const response = await ozaClient.editGroupTopic(id, data);
+    const { title, text, ['cf-turnstile-response']: token } = data;
+    // `CreateTopic` was renamed to `createTopic`
+    const response = await ozaClient.editGroupTopic(id, {
+      title,
+      text,
+      'cf-turnstile-response': token,
+    });
     if (response.status === 200) {
-      topic?.mutate({ ...topic.data, ...data });
+      // Exclude cf-turnstile-response from the data to mutate
+      topic?.mutate({ ...topic.data, title, text });
       navigate(`/group/topic/${id}`);
     } else {
       console.error(response);
@@ -62,10 +86,14 @@ const TopicForm = ({ quickPost = false, groupName, topic }: TopicFormProps) => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setSending(true);
-    if (groupName) {
-      await postNewTopic(data, groupName);
-    } else if (topic) {
-      await editTopic(data, topic.data.id);
+    const token = await execute();
+    if (token) {
+      setValue('cf-turnstile-response', token);
+      if (groupName) {
+        await postNewTopic(data, groupName);
+      } else if (topic) {
+        await editTopic(data, topic.data.id);
+      }
     }
     setSending(false);
   };

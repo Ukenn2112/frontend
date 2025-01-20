@@ -47,13 +47,15 @@
         },
         "nickname": "nickname 287622",
         "sign": "sing 287622",
-        "user_group": 0
+        "joinedAt": 1531631310
       },
       "title": "tes",
       "parentID": 4215,
       "createdAt": 1657885648,
       "updatedAt": 1662283112,
-      "repliesCount": 2
+      "repliesCount": 2,
+      "state": 0,
+      "display": 0
     }
   ],
   "inGroup": false,
